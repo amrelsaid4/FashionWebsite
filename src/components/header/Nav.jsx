@@ -18,6 +18,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import "remixicon/fonts/remixicon.css";
 
 const Search = styled("div")(({ theme }) => ({
   flexGrow: 0.4,
@@ -51,7 +52,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -94,8 +94,14 @@ const Header2 = () => {
   return (
     <Container sx={{ my: 3, display: "flex", justifyContent: "space-between" }}>
       <Stack alignItems={"center"}>
-        <ShoppingCartOutlined />
-        <Typography variant="body2">E-commerce</Typography>
+      <div className="relative flex items-center gap-2 site-brand">
+    <i className="ri-shopping-bag-2-line text-2xl leading-none dark:text-blue-400"></i>
+    <div className="leading-none">
+        <h5 className="font-bold m-0 dark:text-blue-400">Fashion</h5>
+        <small className="text-gray-700 dark:text-gray-300">Template</small>
+    </div>
+</div>
+
       </Stack>
 
       <Search
@@ -134,7 +140,6 @@ const Header2 = () => {
               onClick={handleClickListItem}
             >
               <ListItemText
-                // className="border"
                 sx={{
                   width: 93,
                   textAlign: "center",

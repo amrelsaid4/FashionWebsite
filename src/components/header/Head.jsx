@@ -209,10 +209,10 @@ import {
                 mainLink: "vendor account",
                 subLinks: ["Link 1", "Link 2", "Link 3"],
               },
-            ].map((item) => {
+            ].map((item , index) => {
               return (
                 <Accordion
-                  key={item.mainLink}
+                  key={index}
                   elevation={0}
                   sx={{ bgcolor: "initial" }}
                 >
