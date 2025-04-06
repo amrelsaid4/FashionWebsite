@@ -20,7 +20,7 @@ const Footer = () => {
       variant="h6"
       sx={{fontSize: 18}}
     >
-      Designed and developed by
+    developed by
       <Button
           sx={{
             mx: 0.5,
@@ -31,9 +31,9 @@ const Footer = () => {
           variant="text"
           color="primary"
         >
-          Ali Hassan
+          Amr Elsayed
         </Button>
-      ©2023
+      ©2025
     </Typography>
   </Box>
   );

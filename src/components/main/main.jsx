@@ -1,224 +1,321 @@
+import React, { useState, useEffect } from "react";
 import {
-    Box,
-    Button,
-    Container,
-    Dialog,
-    IconButton,
-    Rating,
-    Stack,
-    Typography,
-    useTheme,
-  } from "@mui/material";
-  import React, { useState } from "react";
-  import ToggleButton from "@mui/material/ToggleButton";
-  import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-  import Card from "@mui/material/Card";
-  import CardActions from "@mui/material/CardActions";
-  import CardContent from "@mui/material/CardContent";
-  import CardMedia from "@mui/material/CardMedia";
-  import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
-  import { Close } from "@mui/icons-material";
-  import ProductDetails from "./ProductDetails";
-  import { useGetproductByNameQuery } from "../../Redux/product";
-  const Main = () => {
-    const handleAlignment = (event, newValue) => {
-      setmyDate(newValue);
-    };
-  
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
-  
-    const allProductsAPI = "products?populate=*";
-    const menCategoryAPI = "products?populate=*&filters[category][$eq]=men";
-    const womenCategoryAPI = "products?populate=*&filters[category][$eq]=women";
-  
-    const [myDate, setmyDate] = useState(allProductsAPI);
-    const { data, error, isLoading } = useGetproductByNameQuery(myDate);
-  
-    if (data) {
-      console.log(data.data);
-    }
-  
-    if (isLoading) {
-      return <Typography variant="h6">LOADING..............</Typography>;
-    }
-  
-    if (error) {
-      return (
-        <Typography variant="h6">
-          {" "}
-          {
-            // @ts-ignore
-            error.message
-          }
-        </Typography>
-      );
-    }
-  
-    if (data) {
-      return (
-        <Container sx={{ py: 9 }}>
-          <Stack
-            direction={"row"}
-            alignItems={"center"}
-            justifyContent={"space-between"}
-            flexWrap={"wrap"}
-            gap={3}
-          >
-            <Box>
-              <Typography variant="h6">Selected Products</Typography>
-              <Typography fontWeight={300} variant="body1">
-                All our new arrivals in a exclusive brand selection
-              </Typography>
-            </Box>
-  
-            <ToggleButtonGroup
-              color="error"
-              value={myDate}
-              exclusive
-              onChange={handleAlignment}
-              aria-label="text alignment"
-              sx={{
-                ".Mui-selected": {
-                  border: "1px solid rgba(233, 69, 96, 0.5) !important",
-                  color: "#e94560",
-                  backgroundColor: "initial",
-                },
-              }}
-            >
-              <ToggleButton
-                sx={{ color: theme.palette.text.primary }}
-                className="myButton"
-                value={allProductsAPI}
-                aria-label="left aligned"
-              >
-                All Products
-              </ToggleButton>
-  
-              <ToggleButton
-                sx={{ mx: "16px !important", color: theme.palette.text.primary }}
-                className="myButton"
-                value={menCategoryAPI}
-                aria-label="centered"
-              >
-                MEN category
-              </ToggleButton>
-  
-              <ToggleButton
-                sx={{ color: theme.palette.text.primary }}
-                className="myButton"
-                value={womenCategoryAPI}
-                aria-label="right aligned"
-              >
-                Women category
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Stack>
-  
-          <Stack
-            direction={"row"}
-            flexWrap={"wrap"}
-            justifyContent={"space-between"}
-          >
-            {data.data.map((item) => {
-              return (
-                <Card
-                  key={item}
-                  sx={{
-                    maxWidth: 333,
-                    mt: 6,
-                    ":hover .MuiCardMedia-root ": {
-                      rotate: "1deg",
-                      scale: "1.1",
-                      transition: "0.35s",
-                    },
-                  }}
-                >
-                  <CardMedia
-                    sx={{ height: 277 }}
-                    // @ts-ignore
-                    image={`${item.attributes.productImg.data[0].attributes.url}`}
-                    title="green iguana"
-                  />
-  
-                  <CardContent>
-                    <Stack
-                      direction={"row"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                    >
-                      <Typography gutterBottom variant="h6" component="div">
-                        {item.attributes.productTitle}
-                      </Typography>
-  
-                      <Typography variant="subtitle1" component="p">
-                        ${item.attributes.productPrice}
-                      </Typography>
-                    </Stack>
-  
-                    <Typography variant="body2" color="text.secondary">
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica
-                    </Typography>
-                  </CardContent>
-  
-                  <CardActions sx={{ justifyContent: "space-between" }}>
-                    <Button
-                      onClick={handleClickOpen}
-                      sx={{ textTransform: "capitalize" }}
-                      size="large"
-                    >
-                      <AddShoppingCartOutlinedIcon
-                        sx={{ mr: 1 }}
-                        fontSize="small"
-                      />
-                      add to cart
-                    </Button>
-                    <Rating
-                      precision={0.1}
-                      name="read-only"
-                      value={item.attributes.productRating}
-                      readOnly
-                    />
-                  </CardActions>
-                </Card>
-              );
-            })}
-          </Stack>
-  
-          <Dialog
-            sx={{ ".MuiPaper-root": { minWidth: { xs: "100%", md: 800 } } }}
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <IconButton
-              sx={{
-                ":hover": { color: "red", rotate: "180deg", transition: "0.3s" },
-                position: "absolute",
-                top: 0,
-                right: 10,
-              }}
-              onClick={handleClose}
-            >
-              <Close />
-            </IconButton>
-  
-            <ProductDetails />
-          </Dialog>
-        </Container>
-      );
+  Button,
+  Dialog,
+  IconButton,
+  Rating,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Alert,
+  Snackbar,
+} from "@mui/material";
+import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
+import { Close } from "@mui/icons-material";
+import axios from "axios";
+import { motion } from "framer-motion";
+
+const Main = () => {
+  const [open, setOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState("all");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const fetchProducts = async (category) => {
+    setLoading(true);
+    setError(null);
+    try {
+      let url = "https://fakestoreapi.com/products";
+      if (category !== "all") {
+        url += `/category/${category === "men" ? "men's clothing" : "women's clothing"}`;
+      }
+      
+      const { data } = await axios.get(url);
+      setProducts(data.map(product => ({
+        ...product,
+        originalPrice: (product.price * (1 + Math.random() * 0.5)).toFixed(2),
+        discount: product.price > 50 ? Math.floor(Math.random() * 30) + 10 : 0
+      })));
+    } catch (error) {
+      setError("Failed to load products. Please try again later.");
+      console.error("Error fetching products", error);
+    } finally {
+      setLoading(false);
     }
   };
-  
-  export default Main;
+
+  useEffect(() => { 
+    fetchProducts(category); 
+  }, [category]);
+
+  const handleImageClick = (product) => {
+    setSelectedProduct(product);
+    setOpen(true);
+  };
+
+  const handleAddToCart = (product) => {
+    setSelectedProduct(product);
+    setSnackbarOpen(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    },
+    hover: {
+      scale: 1.03,
+      boxShadow: "0px 10px 20px rgba(0,0,0,0.1)",
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  return (
+    <div className="container mx-auto py-8 px-4 max-w-7xl">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 className="text-xl font-semibold">Selected Products</h2>
+          <p className="text-gray-600">All our new arrivals in an exclusive brand selection</p>
+        </div>
+
+        <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+          {["all", "men", "women"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategory(cat)}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                category === cat 
+                  ? "bg-red-500 text-white" 
+                  : "hover:bg-gray-200 text-gray-700"
+              }`}
+            >
+              {cat === "all" ? "All Products" : cat.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Loading and Error States */}
+      {loading && (
+        <div className="flex justify-center my-8">
+          <CircularProgress color="error" />
+        </div>
+      )}
+
+      {error && (
+        <Alert severity="error" className="my-4">
+          {error}
+        </Alert>
+      )}
+
+      {/* Products Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product, index) => (
+          <motion.div
+            key={product.id}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            custom={index}
+          >
+            <Card 
+              className="h-full flex flex-col rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-all"
+            >
+              {product.discount > 0 && (
+                <motion.span 
+                  className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded z-10"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  -{product.discount}%
+                </motion.span>
+              )}
+
+              <div 
+                onClick={() => handleImageClick(product)}
+                style={{ cursor: 'pointer' }}
+              >
+                <CardMedia
+                  className="h-48 p-4 bg-white object-contain"
+                  image={product.image}
+                  title={product.title}
+                  component="img"
+                />
+              </div>
+
+              <CardContent className="flex-grow p-4">
+                <h3 
+                  className="font-semibold text-lg mb-2 line-clamp-2 h-14 cursor-pointer"
+                  onClick={() => handleImageClick(product)}
+                >
+                  {product.title}
+                </h3>
+                
+                <Rating 
+                  value={product.rating?.rate || 4.5} 
+                  precision={0.5}
+                  size="small"
+                  readOnly
+                  className="mb-2"
+                />
+
+                <div className="flex items-center gap-2">
+                  {product.discount > 0 ? (
+                    <>
+                      <span className="text-red-500 font-bold text-lg">
+                        ${product.price}
+                      </span>
+                      <span className="text-gray-400 line-through text-sm">
+                        ${product.originalPrice}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="font-bold text-lg">${product.price}</span>
+                  )}
+                </div>
+              </CardContent>
+
+              <CardActions className="p-4 pt-0">
+                <motion.div whileTap={{ scale: 0.95 }}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="error"
+                    size="medium"
+                    startIcon={<AddShoppingCartOutlinedIcon />}
+                    onClick={() => handleAddToCart(product)}
+                    className="normal-case"
+                  >
+                    Add to cart
+                  </Button>
+                </motion.div>
+              </CardActions>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Product Dialog */}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        PaperProps={{ className: "min-w-full md:min-w-[800px] p-4" }}
+      >
+        <IconButton
+          onClick={() => setOpen(false)}
+          className="absolute top-2 right-2 hover:text-red-500 hover:rotate-180 transition-all"
+        >
+          <Close />
+        </IconButton>
+
+        {selectedProduct && (
+          <div className="flex flex-col md:flex-row gap-6 p-4">
+            <motion.div 
+              className="flex justify-center bg-gray-50 p-4 rounded-lg"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <img 
+                src={selectedProduct.image} 
+                alt={selectedProduct.title}
+                className="h-64 object-contain"
+              />
+            </motion.div>
+
+            <motion.div 
+              className="flex-1"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              <h3 className="text-2xl font-bold mb-2">{selectedProduct.title}</h3>
+              
+              <Rating 
+                value={selectedProduct.rating?.rate || 4.5} 
+                precision={0.5}
+                readOnly
+                className="mb-4"
+              />
+
+              <div className="flex items-center gap-4 mb-4">
+                {selectedProduct.discount > 0 ? (
+                  <>
+                    <span className="text-red-500 font-bold text-2xl">
+                      ${selectedProduct.price}
+                    </span>
+                    <span className="text-gray-400 line-through">
+                      ${selectedProduct.originalPrice}
+                    </span>
+                    <span className="text-red-500 text-sm">
+                      Save {selectedProduct.discount}%
+                    </span>
+                  </>
+                ) : (
+                  <span className="font-bold text-2xl">${selectedProduct.price}</span>
+                )}
+              </div>
+
+              <p className="text-gray-700 mb-6">{selectedProduct.description}</p>
+
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="large"
+                  startIcon={<AddShoppingCartOutlinedIcon />}
+                  className="normal-case px-6 py-2"
+                  onClick={() => {
+                    handleAddToCart(selectedProduct);
+                    setOpen(false);
+                  }}
+                >
+                  Buy Now
+                </Button>
+              </motion.div>
+            </motion.div>
+          </div>
+        )}
+      </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+        >
+          <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+            {selectedProduct?.title} added to cart!
+          </Alert>
+        </motion.div>
+      </Snackbar>
+    </div>
+  );
+};
+
+export default Main;

@@ -1,49 +1,77 @@
-/* eslint-disable react/no-unescaped-entities */
 import { AddShoppingCartOutlined } from "@mui/icons-material";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography, Rating, Divider } from "@mui/material";
 
-const ProductDetails = () => {
+const ProductDetails = ({ product }) => {
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 2.5,
+        gap: 4,
+        p: 4,
         flexDirection: { xs: "column", sm: "row" },
       }}
     >
-      <Box sx={{display: "flex"}}>
-        <img width={300} src="src/images/1.jpg" alt="" />
+      <Box sx={{ 
+        display: "flex", 
+        justifyContent: "center",
+        bgcolor: "#f5f5f5",
+        p: 2,
+        borderRadius: 2,
+        flex: 1
+      }}>
+        <img 
+          width={300} 
+          src={product.image} 
+          alt={product.title}
+          style={{ objectFit: "contain", height: 300 }}
+        />
       </Box>
 
-      <Box sx={{textAlign: {xs: "center", sm: "left"}}}  >
-        <Typography variant="h5">WOMEN'S FASHION</Typography>
-        <Typography my={0.4} fontSize={"22px"} color={"crimson"} variant="h6">
-          $12.99
-        </Typography>
-        <Typography variant="body1">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
-
-        <Stack sx={{justifyContent: {xs: "center", sm: "left"}}} direction={"row"} gap={1} my={2}>
-          {["src/images/1.jpg", "src/images/2.jpg"].map((item) => {
-            return (
-              <img
-                style={{ borderRadius: 3 }}
-                height={100}
-                width={90}
-                key={item}
-                src={item}
-                alt=""
-              />
-            );
-          })}
+      <Box sx={{ textAlign: { xs: "center", sm: "left" }, flex: 1 }}>
+        <Typography variant="h5" gutterBottom>{product.title}</Typography>
+        
+        <Rating 
+          value={product.rating?.rate || 4.5} 
+          precision={0.5} 
+          readOnly 
+          sx={{ mb: 1 }}
+        />
+        
+        <Divider sx={{ my: 2 }} />
+        
+        <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+          <Typography fontSize={"22px"} color={"error"} variant="h6">
+            ${product.price}
+          </Typography>
+          {product.originalPrice && (
+            <Typography variant="body1" color="text.secondary" sx={{ textDecoration: "line-through" }}>
+              ${product.originalPrice}
+            </Typography>
+          )}
+          {product.discount > 0 && (
+            <Typography variant="body2" color="error">
+              Save {product.discount}%
+            </Typography>
+          )}
         </Stack>
+        
+        <Typography variant="body1" paragraph>
+          {product.description}
+        </Typography>
 
-        <Button sx={{mb: {xs: 1, sm: 0} ,textTransform: "capitalize" }} variant="contained">
+        <Button 
+          sx={{ 
+            mb: { xs: 1, sm: 0 }, 
+            textTransform: "capitalize",
+            px: 4,
+            py: 1.5
+          }} 
+          variant="contained" 
+          color="error"
+        >
           <AddShoppingCartOutlined sx={{ mr: 1 }} fontSize="small" />
-          Buy now
+          Add to Cart
         </Button>
       </Box>
     </Box>

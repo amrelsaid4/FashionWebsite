@@ -18,6 +18,7 @@
     "@mui/styled-engine-sc": "^7.0.1",
     "@reduxjs/toolkit": "^2.6.1",
     "@tailwindcss/vite": "^4.0.17",
+    "framer-motion": "^12.6.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/material-ui": "^0.21.18",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
